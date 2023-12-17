@@ -16,17 +16,34 @@
                     method: 'GET',
                     credentials: 'include',
                 })
-                    .then(data => data.json())
+                .then(response => response.json())
+                .then(userData => {
+                    // userData содержит данные о пользователе, включая его id
+                    const userId = userData.id;
 
-                    .then(data => {
-                        console.log(data)
-                        if (data.detail == 'Unauthorized'){
-                            window.location.href = '/account';
-                        }
-                    })
+                    // Отправляем запрос на cart_items/id
+                    return fetch(`http://127.0.0.1:8000/cart_items/${userId}`, {
+                        headers: {
+                            'Content-type': 'application/json',
+                        },
+                        method: 'GET',
+                        credentials: 'include',
+                    });
+                })
+                .then(cartItemsResponse => cartItemsResponse.json())
+                .then(cartItemsData => {
+                    cartItemsData.products.forEach(product => {
+                        console.log(product)
+                        
+                    });
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                });
             }
             window.onload = thisUser;
-            </script>
+            
+        </script>
     </head>
     <body>
         <div class="stike-em-all-page">

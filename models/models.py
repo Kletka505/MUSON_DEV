@@ -41,3 +41,10 @@ rifle = Table(
     
 )
 
+carts = Table(
+    "carts",
+    metadata,
+    Column("id", Integer, primary_key=True),
+    Column("user_id", String),
+    Column("product_name", String),
+)

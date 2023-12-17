@@ -1,7 +1,7 @@
 from fastapi_users import fastapi_users, FastAPIUsers
 from pydantic import Field
 
-from fastapi import FastAPI, Depends
+from fastapi import FastAPI, Depends, HTTPException
 from fastapi.encoders import jsonable_encoder
 from fastapi.responses import HTMLResponse
 from fastapi.staticfiles import StaticFiles
@@ -16,8 +16,8 @@ from server.manager import get_user_manager
 from fastapi.middleware.cors import CORSMiddleware
 from server.schemas import UserRead, UserCreate, UserUpdate
 
-from models.models import rifle
-from sqlalchemy import Column, String, Boolean, Integer, TIMESTAMP, ForeignKey, create_engine, select
+from models.models import rifle, carts
+from sqlalchemy import Column, String, Boolean, Integer, TIMESTAMP, ForeignKey, create_engine, select, insert
 from sqlalchemy.ext.asyncio import AsyncSession 
 from sqlalchemy.ext.declarative import DeclarativeMeta, declarative_base
 from sqlalchemy.orm import sessionmaker, Session
@@ -101,22 +101,50 @@ session = Session(bind=engine)
 
 @app.get("/rifle")
 def get_rifles():
-    query = select(rifle)
-    result = session.execute(query)
-    j = 0
-    S = {"products" : []}
-    for i in result.all():
-        S['products'].append({})
-        S['products'][j]["name"] = i[1]
-        S['products'][j]["brand"] = i[2]
-        S['products'][j]["price"] = i[3]
-        S['products'][j]["calibr"] = i[4]
-        S['products'][j]["image_path"] = i[5]
-        j+=1
+    try:
+        query = select(rifle)
+        data = session.execute(query)
+        j = 0
+        result = {"products" : []}
+        for i in data.all():
+            result['products'].append({})
+            result['products'][j]["name"] = i[1]
+            result['products'][j]["brand"] = i[2]
+            result['products'][j]["price"] = i[3]
+            result['products'][j]["calibr"] = i[4]
+            result['products'][j]["image_path"] = i[5]
+            j+=1
+        print(result)
+
+        return result
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Error: {str(e)}")
+
+
+@app.post("/add_to_cart/{user_id}/{product_name}")
+async def add_to_cart(user_id: int, product_name: str):
+    try:
+        stmt = insert(carts).values(user_id=f"{user_id}", product_name=f"{product_name}")
+        result = session.execute(stmt)
+        session.commit()
+    except Exception as e:
+        print(e)
+        raise HTTPException(status_code=500, detail=f"Error: {str(e)}")
     
+@app.get("/cart_items/{user_id}")
+async def add_to_cart(user_id: int):
+    query = select(carts).where(carts.c.user_id == f"{user_id}")
+    result = session.execute(query)
+    S = {"products": [i[2] for i in result.all()]}
+    print(S)
     return S
 
-@app.get("/product")
-def get_rifles():
-    return
-
+    
+@app.get("/product/{product_name}")
+async def add_to_cart(product_name: int):
+    try:
+        query = select(rifle).where(rifle.c.name == f"{product_name}")
+        result = session.execute(query)
+        return result
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Error: {str(e)}")

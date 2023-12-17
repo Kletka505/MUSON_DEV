@@ -6,6 +6,9 @@
         <meta name="language" content="RU">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link rel="stylesheet" href="{{ url_for('static', path='styles/style.css') }}">
+        <style> 
+            @import url('https://fonts.googleapis.com/css2?family=Merriweather:wght@400;700&family=Odor+Mean+Chey&display=swap'); 
+        </style>
     </head>
     <body>
         <div class="stike-em-all-page">
@@ -219,6 +222,40 @@
             return data;
         }
 
+        var Addtocart = function(name) {
+            fetch("http://127.0.0.1:8000/users/me", {
+                    headers: {
+                        'Content-type': 'application/json',
+                    },
+                    method: 'GET',
+                    credentials: 'include',
+                })
+                    .then(data => data.json())
+
+                    .then(data => {
+                        fetch(`http://127.0.0.1:8000/add_to_cart/${data.id}/${name}`, {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json'
+                            }
+                        })
+                        .then(response => {
+                            if (!response.ok) {
+                                throw new Error(`HTTP error! Status: ${response.status}`);
+                            }
+                            return response.json();
+                        })
+                        .then(data => {
+                            console.log(data);
+                            alert("Товар успешно добавлен в корзину");
+                        })
+                        .catch(error => {
+                            console.error('Fetch error:', error);
+                            alert('Невозможно добавить товар в коризну, вы не авторизованы');
+                        });
+                    })
+                }
+                
         function createProductCard(product) {
 
             const itemCatalog = document.getElementById('catalog');
@@ -250,17 +287,17 @@
             name.className = "item__name-label item_catalog__name-label";
             link2.appendChild(name)
 
-
-
-            // Создаем вторую строку
             const row2 = document.createElement('div');
             row2.className = 'item_catalog__row';
 
-            // Создаем кнопку "В корзину"
-            const purchaseButton = document.createElement('input');
+            // Добавляем кнопку
+            const purchaseButton = document.createElement("input");
             purchaseButton.className = 'submit-button item_catalog__purchase-button';
-            purchaseButton.type = 'button';
             purchaseButton.value = 'В корзину';
+            purchaseButton.type = "button"
+            purchaseButton.onclick = function() {
+                Addtocart(product.name);
+            };
 
             const price = document.createElement('span')
             price.textContent = product.price;
@@ -277,11 +314,13 @@
 
             itemCatalog.appendChild(itemContainer);
         }
+        
 
         fetchData('http://127.0.0.1:8000/rifle')
         .then(data => {
 
             data.products.forEach(product => {
+                console.log(product)
                 createProductCard(product);
             });
         })

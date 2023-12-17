@@ -32,9 +32,9 @@
                     <div class="header__column">
                         <div class="catalog-search">
                             <form class="catalog-search__form" action="/search/" method="get" autocomplete="off" >
-                                <input 
+                                <input
                                     class="catalog-search__input"
-                                    type="text" 
+                                    type="text"
                                     name="text"
                                     placeholder="Поиск по каталогу">
                             </form>
@@ -322,6 +322,7 @@
                 // if(!CheckName() || !CheckTelephone() || !CheckEmail() || !CheckBirthday() || !CheckPassword()) {
                 //     return;
                 // }
+                event.preventDefault();
                 let username = document.getElementById('authorization-field-name').value;
                 let phone_number = document.getElementById('authorization-field-phone').value;
                 let email = document.getElementById('authorization-field-email').value;
@@ -334,19 +335,13 @@
                 xhr.open("POST", url, true);
                 xhr.setRequestHeader("Content-Type", "application/json");
         
-                xhr.onreadystatechange = function () {
+                xhr.onload = function () {
                 if (xhr.status === 201) {
                     window.location.href = "/cart"
                 } else if (xhr.status === 400){
-                    let emailInput = document.getElementById('authorization-field-email');
-                    let emailText = document.getElementById('authorization-p-email');
-                    UnvalidateInput(emailInput, emailText, 'Уже зарегистрирован');
-        
-                    
+                    alert("Пользователь уже зарегистрирован")
                 } else {
-                    event.preventDefault();
-                    event.stopPropagation();
-                    console.log('Error');
+                    alert("Данные введены неверно или отсутствуют")
                 }
                 
                 }
@@ -356,6 +351,7 @@
                 xhr.send(data);
             }
             function LoginUser() {
+                event.preventDefault();
                 let email = document.getElementById('login-field-email').value;
                 let password = document.getElementById('login-field-password').value;
                 
@@ -365,18 +361,18 @@
                 let url = "http://127.0.0.1:8000/auth/login";
                 xhr.open("POST", url, true);
                 xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+
+                xhr.onload = function () {
+                if (xhr.status === 200) {
+                    window.location.href = '/cart';
+                } else {
+                    alert("Неверные логин или пароль")
+                }
+                }
                 
-                xhr.onreadystatechange = function () {
-                    if (xhr.status == 200) {
-                        window.location.href = '/cart';
-                    } else {
-                    
-                    }
-                    }
+                
                 var data = 'username=' + encodeURIComponent(email) + '&password=' + encodeURIComponent(password);
                 xhr.send(data);
-                
-
             }
         </script>
     </body>
