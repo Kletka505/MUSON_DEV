@@ -1,0 +1,29 @@
+.catalog-search__input {
+    box-sizing: border-box;
+    width: 450px;
+    height: 45px;
+
+    padding-left: 15px;
+
+    border: 1px solid #fff;
+    border-radius: 5px;
+
+    background-color: #111111;
+    color: #fff;
+    
+    font-family: 'Merriweather';
+    font-size: 16px;
+    vertical-align: middle;
+
+    transition: border 0.2s;
+}
+
+.catalog-search__input::placeholder {
+    color: #888;
+    font-family: 'Merriweather';
+}
+
+.catalog-search__input:focus {
+    border: 1px solid #B41818;
+    outline: 2px solid #B41818;
+}

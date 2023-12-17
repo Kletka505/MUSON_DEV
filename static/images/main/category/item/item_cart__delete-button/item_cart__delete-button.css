@@ -1,0 +1,6 @@
+@import url(delete-button__img.css);
+
+.item_cart__delete-button {
+    border: none;
+    fill: none;
+}

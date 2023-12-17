@@ -1,0 +1,17 @@
+@import url(result-price__name-label.css);
+@import url(result-price__number.css);
+
+.result-price {
+    align-self: flex-end;
+    
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: baseline;
+    gap: 15px;
+
+    font-weight: bold;
+    
+    margin-top: 30px;
+    margin-bottom: 15px; 
+}

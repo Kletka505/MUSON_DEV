@@ -1,0 +1,5 @@
+.website-breadcrumbs__item_previous::after
+{
+    content: "/";
+    margin-left: 20px;
+}

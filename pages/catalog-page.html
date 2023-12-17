@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Страйкбольные автоматы — Strike 'Em All</title>
+        <meta charset="utf-8">
+        <meta name="language" content="RU">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="{{ url_for('static', path='styles/style.css') }}">
+    </head>
+    <body>
+        <div class="stike-em-all-page">
+            <header class="header">
+                <div class="header__container">
+                    <div class="header__column">
+                        <div class="logo header__logo">
+                            <a class="logo__link-container" href="/home">
+                                <img class="logo__img noselect" src="{{ url_for('static', path='images/common/logo/logo.svg')}}" alt="three targets">
+                                    <span class="logo__name-label">Strike 'Em All</span>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="header__column">
+                        <nav class="website-menu header__website-menu">
+                            <ul class="website-menu__list">
+                                <li class="website-menu__item"><a class="website-menu__link website-menu__link_chosen" href="/catalog">Каталог</a></li>
+                                <li class="website-menu__item"><a class="website-menu__link" href="in-development.html">Отзывы</a></li>
+                                <li class="website-menu__item"><a class="website-menu__link" href="/about">О нас</a></li>
+                            </ul>
+                        </nav>
+                    </div>
+                    <div class="header__column">
+                        <div class="catalog-search">
+                            <form class="catalog-search__form" action="/search/" method="get" autocomplete="off" >
+                                <input 
+                                    class="catalog-search__input"
+                                    type="text" 
+                                    name="text"
+                                    placeholder="Поиск по каталогу">
+                            </form>
+                        </div>
+                    </div>
+                    <div class="header__column">
+                        <nav class="user-navigation">
+                            <ul class="user-navigation__list">
+                                <li class="user-navigation__item">
+                                    <a class="user-navigation__link" href="/account">
+                                        <img class="user-navigation__img user-navigation__img_color_fff noselect" src="{{ url_for('static', path='images/header/user-navigation/account_fff.svg')}}" alt="account">
+                                    </a>
+                                </li>
+                                <li class="user-navigation__item">
+                                    <a class="user-navigation__link" href="in-development.html">
+                                        <img class="user-navigation__img user-navigation__img_color_fff noselect" src="{{ url_for('static', path='images/header/user-navigation/favourites_fff.svg')}}" alt="favourites">
+                                    </a>
+                                </li>
+                                <li class="user-navigation__item">
+                                    <a class="user-navigation__link" href="/cart">
+                                        <img class="user-navigation__img user-navigation__img_color_fff noselect" src="{{ url_for('static', path='images/header/user-navigation/shopping-cart_fff.svg')}}" alt="shopping-cart">
+                                    </a>
+                                </li>
+                            </ul>
+                        </nav>
+                    </div>
+                </div>
+            </header>
+            <main class="main">
+                <div class="main__container">
+                    <div class="main__row">
+                        <div class="main-header">
+                            <nav class="website-breadcrumbs">
+                                <ol class="website-breadcrumbs__list">
+                                    <li class="website-breadcrumbs__item website-breadcrumbs__item_previous"><a class="website-breadcrumbs__previous-dir" href="/home">Главная</a></li>
+                                    <li class="website-breadcrumbs__item website-breadcrumbs__item_previous"><a class="website-breadcrumbs__previous-dir" href="/catalog">Каталог</a></li>
+                                    <li class="website-breadcrumbs__item website-breadcrumbs__item_current"><span class="website-breadcrumbs__current-dir">Страйкбольные автоматы</span></li>
+                                </ol>
+                            </nav>
+                            <div class="page-headline">
+                                <h1 class="page-headline__name-label">Страйкбольные автоматы</h1>
+                                <span class="page-headline__count">3</span>
+                            </div>
+                            <div class="header-actions">
+                                <div class="header-actions__column">
+                                    <!-- shamil tbc -->
+                                    <div class="filter-block filter-label">
+                                        <div class="filter-block__column">
+                                            <img class=" filter-block__img noselect" src="{{ url_for('static', path='images/main/main-header/header-actions/filter-block/filter_111.svg')}}" alt="filters">
+                                        </div>
+                                        <div class="filter-block__column">
+                                            <span class="filter-block__name-label">Фильтры</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="header-actions__column">
+                                    <div class="filters-flow">
+                                        <!-- shamil tbc -->
+                                    </div>
+                                </div>
+                                <div class="header-actions__column">
+                                    <div class="sort-items">
+                                        <form class="sort-items__form" action="/select/" method="get">
+                                            <select class="sort-items__button" name="catalog-items">
+                                                <option value="price_asc">По цене (возрастание)</option>
+                                                <option value="price_desc">По цене (убывание)</option>
+                                                <option value="name_asc">По названию (возрастание)</option>
+                                                <option value="name_desc">По названию (убывание)</option>
+                                                <option value="pop_desc">Популярные</option>
+                                                <option value="rate_desc">Высокий рейтинг</option>
+                                            </select>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- shamil tbc -->
+                            <hr class="page-divide-line">
+                        </div>
+                    </div>
+                    <div class="main__row">
+                        <div class="category">
+                            <div class="filter-panel">
+                                <div class="filter-unit">
+                                    <span class="filter-unit__name-label">Бренд:</span>
+                                    <ul class="filter-unit__parameters-list">
+                                        <li class="filter-unit__parameter noselect"><input class="filter-unit__checkbox" type="checkbox">AGM</li>
+                                        <li class="filter-unit__parameter noselect"><input class="filter-unit__checkbox" type="checkbox">Colt</li>
+                                        <li class="filter-unit__parameter noselect"><input class="filter-unit__checkbox" type="checkbox">Cyma</li>
+                                    </ul>
+                                </div>
+                                <div class="filter-unit">
+                                    <span class="filter-unit__name-label">Калибр:</span>
+                                    <ul class="filter-unit__parameters-list">
+                                        <li class="filter-unit__parameter noselect"><input class="filter-unit__checkbox" type="checkbox">6ММ</li>
+                                        <li class="filter-unit__parameter noselect"><input class="filter-unit__checkbox" type="checkbox">9ММ</li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="item-catalog airsoft-rifles__catalog" id="catalog">
+                            
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- <div class="purchase-popup">
+                    <div class="purchase-popup__body">
+                        <div class="purchase-popup__content">
+                            <a class="purchase-popup__close-button noselect" href="#">X</a>
+                            <h2 class="purchase-popup__header">Товар добавлен в корзину</h2>
+                            <div class="popup-catalog-item purchase-popup__popup-catalog-item">
+                                <div class="popup-catalog-item__row">
+                                    <img class="popup-catalog-item__img" src="../components/main/catalog-page__main/category/item-catalog/airsoft-rifles__catalog/COLT_M4A1_FullMetal_13_Keymod_Airsoft_AEG_Black.png">
+                                </div>
+                                <div class="popup-catalog-item__row">
+                                    <div class="popup-catalog-item__texted">
+                                        <div class="popup-catalog-item__labels">
+                                            <div class="popup-catalog-item__name-label">COLT M4A1 Full Metal 13" Keymod Airsoft AEG, Black</div>
+                                            <div class="popup-catalog-item__price-label">22.490 ₽</div>
+                                        </div>
+                                        <div class="popup-catalog-item__buttons">
+                                            <button class="submit-button popup-catalog-item__purchase-button">Перейти в корзину</button>
+                                            <button class="popup-catalog-item__continue-button">Продолжить покупки</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div> -->
+            </main>
+            <footer class="footer">
+                <div class="footer__container">
+                    <div class="footer__column">
+                        <div class="logo footer__logo">
+                            <a class="logo__link" href="home-page.html">
+                                <span class="logo__name-label">Strike 'Em All</span>
+                            </a>
+                            <p class="logo__copyright-label">© 2023 Все права защищены.</p>
+                        </div>
+                    </div>
+                    <div class="footer__column">
+                        <nav class="footer-info website-info">
+                            <span class="footer-info__name-label website-info__name-label">Информация</span>
+                            <ul class="footer-info__list website-info__list">
+                                <li class="footer-info__item website-info__item"><a class="footer-info__link website-info__link" href="about-us-page.html">О нас</a></li>
+                                <li class="footer-info__item website-info__item"><a class="footer-info__link website-info__link" href="in-development.html">Отзывы</a></li>
+                                <li class="footer-info__item website-info__item"><a class="footer-info__link website-info__link" href="in-development.html">Политика безопасности</a></li>
+                            </ul>
+                        </nav>
+                    </div>
+                    <div class="footer__column">
+                        <nav class="footer-info social-media">
+                            <span class="footer-info__name-label social-media__name-label">Социальные сети</span>
+                            <ul class="footer-info__list social-media__list">
+                                <li class="footer-info__item social-media__item">
+                                    <a class="footer-info__link social-media__link" href="https://vk.com/strikeEmAll">
+                                        <img class="footer-info__img social-media__img img-noselect" src="{{ url_for('static', path='images/footer/social-media/vk_fff.svg')}}" alt="vk">
+                                        ВКонтакте
+                                    </a>
+                                </li>
+                                <li class="footer-info__item social-media__item">
+                                    <a class="footer-info__link social-media__link" href="https://t.me/strikeEmAll">
+                                        <img class="footer-info__img social-media__img img-noselect" src="{{ url_for('static', path='images/footer/social-media/telegram_fff.svg')}}" alt="telegram">
+                                        Telegram
+                                    </a>
+                                </li>
+                                <li class="footer-info__item social-media__item">
+                                    <a class="footer-info__link social-media__link" href="https://www.youtube.com/@strikeEmAll">
+                                        <img class="footer-info__img social-media__img img-noselect" src="{{ url_for('static', path='images/footer/social-media/vk_fff.svg')}}" alt="youtube">
+                                        YouTube
+                                    </a>
+                                </li>
+                            </ul>
+                        </nav>
+                    </div>
+                </div>
+            </footer>
+        </div>
+    <script>
+        async function fetchData(url) {
+            const response = await fetch(url);
+            const data = await response.json();
+            return data;
+        }
+
+        function createProductCard(product) {
+
+            const itemCatalog = document.getElementById('catalog');
+
+            // Создаем основной контейнер для карточки товара
+            const itemContainer = document.createElement('div');
+            itemContainer.className = 'item_catalog';
+
+            const row1 = document.createElement('div');
+            row1.className = 'item_catalog__row';
+
+            
+            const link1 = document.createElement('a');
+            link1.className = 'item__link item_catalog__link';
+
+
+            const image = document.createElement('img')
+            image.className = "item__img item_catalog__img img-noselect"
+            image.src = `{{ url_for('static', path='${product.image_path}')}}`
+            link1.appendChild(image)
+
+            
+            const link2 = document.createElement('a');
+            link1.className = 'item__link item_catalog__link';
+
+
+            const name = document.createElement('span')
+            name.textContent = product.name;
+            name.className = "item__name-label item_catalog__name-label";
+            link2.appendChild(name)
+
+
+
+            // Создаем вторую строку
+            const row2 = document.createElement('div');
+            row2.className = 'item_catalog__row';
+
+            // Создаем кнопку "В корзину"
+            const purchaseButton = document.createElement('input');
+            purchaseButton.className = 'submit-button item_catalog__purchase-button';
+            purchaseButton.type = 'button';
+            purchaseButton.value = 'В корзину';
+
+            const price = document.createElement('span')
+            price.textContent = product.price;
+            price.className = 'item__price-label item_catalog__price-label';
+
+            // Добавляем элементы в DOM
+            row1.appendChild(link1);
+            row1.appendChild(link2);
+            row1.appendChild(price); // Здесь можно добавить другие элементы для первой строки
+            row2.appendChild(purchaseButton);
+
+            itemContainer.appendChild(row1);
+            itemContainer.appendChild(row2);
+
+            itemCatalog.appendChild(itemContainer);
+        }
+
+        fetchData('http://127.0.0.1:8000/rifle')
+        .then(data => {
+
+            data.products.forEach(product => {
+                createProductCard(product);
+            });
+        })
+        .catch(error => console.error('Error fetching data:', error));
+    </script>
+    </body>
+</html>

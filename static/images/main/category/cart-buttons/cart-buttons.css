@@ -1,0 +1,14 @@
+@import url(continue-shopping-button.css);
+@import url(place-order-button.css);
+@import url(cart-button__link.css);
+
+.cart-buttons {
+    display: flex;
+    flex-direction: row;
+    gap: 25px;
+
+    width: 48%;
+    align-self: flex-end;
+
+    margin-bottom: 100px;
+}

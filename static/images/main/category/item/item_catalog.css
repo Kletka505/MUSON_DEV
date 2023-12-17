@@ -1,0 +1,28 @@
+@import url(item__img.css);
+@import url(item__name-label.css);
+@import url(item__price-label.css);
+@import url(item_catalog__purchase-button.css);
+@import url(item_catalog__row.css);
+
+.item_catalog {
+    border-radius: 10px;
+    background-color: #fff;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    
+    box-sizing: border-box;
+    
+    width: 22%;
+    height: 400px;
+
+    padding: 20px 0;
+    margin-bottom: 25px;
+
+    color: #111;
+    font-family: 'Merriweather';
+    font-size: 18px;
+    line-height: 27px; 
+}

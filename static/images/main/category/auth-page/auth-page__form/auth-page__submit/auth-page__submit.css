@@ -1,0 +1,5 @@
+@import url(auth-page__auth-button/auth-page__auth-button.css);
+
+.auth-page__submit {
+    width: 100%;
+}

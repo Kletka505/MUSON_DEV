@@ -1,0 +1,11 @@
+alembic
+asyncpg
+fastapi[all]
+fastapi-users[sqlalchemy]
+python-dotenv
+sqlalchemy
+pytest
+httpx
+psycopg2
+pydantic
+

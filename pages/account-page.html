@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Личный кабинет — Strike 'Em All</title>
+        <meta charset="utf-8">
+        <meta name="language" content="RU">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="{{ url_for('static', path='styles/style.css') }}">
+        
+    </head>
+    <body>
+        <div class="stike-em-all-page">
+            <header class="header">
+                <div class="header__container">
+                    <div class="header__column">
+                        <div class="logo header__logo">
+                            <a class="logo__link-container" href="home">
+                                <img class="logo__img noselect" src="{{ url_for('static', path='images/common/logo/logo.svg')}}" alt="three targets">
+                                    <span class="logo__name-label">Strike 'Em All</span>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="header__column">
+                        <nav class="website-menu header__website-menu">
+                            <ul class="website-menu__list">
+                                <li class="website-menu__item"><a class="website-menu__link website-menu__link_chosen" href="/catalog">Каталог</a></li>
+                                <li class="website-menu__item"><a class="website-menu__link" href="in-development.html">Отзывы</a></li>
+                                <li class="website-menu__item"><a class="website-menu__link" href="/about">О нас</a></li>
+                            </ul>
+                        </nav>
+                    </div>
+                    <div class="header__column">
+                        <div class="catalog-search">
+                            <form class="catalog-search__form" action="/search/" method="get" autocomplete="off" >
+                                <input 
+                                    class="catalog-search__input"
+                                    type="text" 
+                                    name="text"
+                                    placeholder="Поиск по каталогу">
+                            </form>
+                        </div>
+                    </div>
+                    <div class="header__column">
+                        <nav class="user-navigation">
+                            <ul class="user-navigation__list">
+                                <li class="user-navigation__item">
+                                    <a class="user-navigation__link" href="/account">
+                                        <img class="user-navigation__img user-navigation__img_color_fff noselect" src="{{ url_for('static', path='images/header/user-navigation/account_fff.svg')}}" alt="account">
+                                    </a>
+                                </li>
+                                <li class="user-navigation__item">
+                                    <a class="user-navigation__link" href="in-development.html">
+                                        <img class="user-navigation__img user-navigation__img_color_fff noselect" src="{{ url_for('static', path='images/header/user-navigation/favourites_fff.svg')}}" alt="favourites">
+                                    </a>
+                                </li>
+                                <li class="user-navigation__item">
+                                    <a class="user-navigation__link" href="/cart">
+                                        <img class="user-navigation__img user-navigation__img_color_fff noselect" src="{{ url_for('static', path='images/header/user-navigation/shopping-cart_fff.svg')}}" alt="shopping-cart">
+                                    </a>
+                                </li>
+                            </ul>
+                        </nav>
+                    </div>
+                </div>
+            </header>
+            <main class="main">
+                <div class="main__container">
+                    <div class="main__row">
+                        <div class="main-header">
+                            <nav class="website-breadcrumbs">
+                                <ol class="website-breadcrumbs__list">
+                                    <li class="website-breadcrumbs__item website-breadcrumbs__item_previous"><a class="website-breadcrumbs__previous-dir" href="/home">Главная</a></li>
+                                    <li class="website-breadcrumbs__item website-breadcrumbs__item_current"><span class="website-breadcrumbs__current-dir" href="#">Личный кабинет</span></li>
+                                </ol>
+                            </nav>
+                            <div class="page-headline hidden">
+                                <h1 class="page-headline__name-label">Личный кабинет</h1>
+                            </div>
+                            <hr class="page-divide-line hidden">
+                        </div>
+                    </div>
+                    <div class="main__row">
+                        <div class="category">
+                            <div class="auth-page">
+                                <div class="auth-page__column">
+                                    <div class="auth-page__login">
+                                        <form class="auth-page__form auth-page__form-users validate">
+                                            <h3 class="auth-page__name-label">Авторизация</h3>
+                                            <div class="auth-page__field">
+                                                <input class="auth-page__input required" id="login-field-email" type="text" name="email" placeholder="E-mail"/>
+                                            </div>
+                                            <div class="auth-page__field">
+                                                <input class="auth-page__input required" id="login-field-password" type="password" name="password" placeholder="Пароль"/>
+                                            </div>
+                                            <div class="auth-page__field">
+                                                <input type="checkbox" name="remember" value="1" id="remember"/>
+                                                <label class="auth-page__checkbox-text" for="remember">Запомнить меня на сайте</label>
+                                            </div>
+                                            <div class="auth-page__submit">
+                                                <button class="submit-button auth-page__auth-button" onclick="LoginUser()">Войти</button>
+                                            </div>
+                                            <a class="auth-page__restore-password" href="in-development.html">Восстановить пароль</a>
+                                        </form>
+                                    </div>
+                                </div>
+                                <div class="auth-page__column">
+                                    <div class="auth-page__registration">
+                                        <form class="auth-page__form auth-page__form-users validate">
+                                            <h3 class="auth-page__name-label">Регистрация</h3>
+                                            <div class="auth-page__field">
+                                                <input class="auth-page__input required" id="authorization-field-name" type="text" name="name" placeholder="Имя" value=""/>
+                                            </div>
+                                            <div class="auth-page__field">
+                                                <input class="auth-page__input required" id="authorization-field-email" type="text" name="email" placeholder="E-mail" value=""/>
+                                            </div>
+                                            <div class="auth-page__field">
+                                                <input class="auth-page__input" id="authorization-field-phone" type="text" name="phone" placeholder="Телефон" value=""/>
+                                            </div>
+                                            <div class="auth-page__field">
+                                                <input class="auth-page__input required" id="authorization-field-password" type="password" name="password" placeholder="Пароль" value=""/>
+                                            </div>
+                                            <div class="auth-page__field">
+                                                <input class="auth-page__input required" id="authorization-field-birthday" type="text" name="birthday" placeholder="Дата рождения" value=""/>
+                                            </div>
+                                            <div class="auth-page__submit">
+                                                <button class="submit-button auth-page__auth-button" onClick="createUser()">
+                                                    <span>Зарегистрироваться</span>
+                                                </button>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="profile-page hidden">
+                                <div class="user-data">
+                                    <div class="user-data__row user-data__name">
+                                        <div class="user-data__row-label user-data__row-label_name">Имя: </div>
+                                        <div class="user-data__row-value user-data__row-value_name">Иван</div>
+                                    </div>
+                                    <div class="user-data__row user-data__email">
+                                        <div class="user-data__row-label user-data__row-label_email">Email: </div>
+                                        <div class="user-data__row-value user-data__row-value_email">vanyaKrutoy2004@rambler.ru</div>
+                                    </div>
+                                    <div class="user-data__row user-data__phone">
+                                        <div class="user-data__row-label user-data__row-label_phone">Телефон: </div>
+                                        <div class="user-data__row-value user-data__row-value_phone">8(800)555-35-35</div>
+                                    </div>
+                                </div>
+                                <div class="profile-buttons">
+                                    <a class="profile-button more-data-button" href="in-development.html">Профиль</a>
+                                    <a class="profile-button logout-button" href="in-development.html">Выйти из аккаунта</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </main>
+            <footer class="footer">
+                <div class="footer__container">
+                    <div class="footer__column">
+                        <div class="logo footer__logo">
+                            <a class="logo__link" href="/home">
+                                <span class="logo__name-label">Strike 'Em All</span>
+                            </a>
+                            <p class="logo__copyright-label">© 2023 Все права защищены.</p>
+                        </div>
+                    </div>
+                    <div class="footer__column">
+                        <nav class="footer-info website-info">
+                            <span class="footer-info__name-label website-info__name-label">Информация</span>
+                            <ul class="footer-info__list website-info__list">
+                                <li class="footer-info__item website-info__item"><a class="footer-info__link website-info__link" href="/about">О нас</a></li>
+                                <li class="footer-info__item website-info__item"><a class="footer-info__link website-info__link" href="in-development.html">Отзывы</a></li>
+                                <li class="footer-info__item website-info__item"><a class="footer-info__link website-info__link" href="in-development.html">Политика безопасности</a></li>
+                            </ul>
+                        </nav>
+                    </div>
+                    <div class="footer__column">
+                        <nav class="footer-info social-media">
+                            <span class="footer-info__name-label social-media__name-label">Социальные сети</span>
+                            <ul class="footer-info__list social-media__list">
+                                <li class="footer-info__item social-media__item">
+                                    <a class="footer-info__link social-media__link" href="https://vk.com/strikeEmAll">
+                                        <img class="footer-info__img social-media__img img-noselect" src="{{ url_for('static', path='images/footer/social-media/vk_fff.svg')}}" alt="vk">
+                                        ВКонтакте
+                                    </a>
+                                </li>
+                                <li class="footer-info__item social-media__item">
+                                    <a class="footer-info__link social-media__link" href="https://t.me/strikeEmAll">
+                                        <img class="footer-info__img social-media__img img-noselect" src="{{ url_for('static', path='images/footer/social-media/telegram_fff.svg')}}" alt="telegram">
+                                        Telegram
+                                    </a>
+                                </li>
+                                <li class="footer-info__item social-media__item">
+                                    <a class="footer-info__link social-media__link" href="https://www.youtube.com/@strikeEmAll">
+                                        <img class="footer-info__img social-media__img img-noselect" src="{{ url_for('static', path='images/footer/social-media/vk_fff.svg')}}" alt="youtube">
+                                        YouTube
+                                    </a>
+                                </li>
+                            </ul>
+                        </nav>
+                    </div>
+                </div>
+            </footer>
+        </div>
+        <script>
+            const cameFromShoppingCart = true;
+            const isAuthorised = false;
+        
+        
+        
+            function authPageFormSent(authPageForm) {
+                if (accountLogged == true) {
+                    window.location.href = "../pages/shopping-cart.html";
+                };
+            }
+        
+            const UnvalidateInput = (input, p, text) => {
+                input.classList.remove('field-yellow');
+                input.classList.add('field-red');
+                p.innerText = text;
+                p.style.color = 'red';
+            }
+        
+            const ValidateInput = (input, p, text) => {
+                input.classList.remove('field-red');
+                input.classList.add('field-yellow');
+                p.innerText = text;
+                p.style.color = 'black';
+            }
+        
+            const ValidateName = (name) => {
+                return (name.length >= 6 ? true : false);
+            }
+        
+            const ValidateTelephone = (telephone) => {
+                // eslint-disable-next-line no-useless-escape
+                return telephone.match(/^[\d\+][\d\(\)\ -]{4,14}\d$/);
+            }
+        
+            const ValidateEmail = (email) => {
+                // eslint-disable-next-line no-useless-escape
+                if(email.match(/^[\w]{1}[\w-\.]*@[\w-]+\.[a-z]{2,4}$/i))
+                    return true;
+                return false;
+            };
+        
+            const ValidateBirthday = (birthday) => {
+                return (birthday.length == 10 ? true : false);
+            }
+        
+            const ValidatePassword = (password) => {
+                return (password.length >= 6 ? true : false);
+            }
+        
+            const CheckName = () => {
+                let nameInput = document.getElementById('authorization-field-name');
+                let nameText = document.getElementById('authorization-p-name');
+                let name = nameInput.value;
+                if (!ValidateName(name)) {
+                    UnvalidateInput(nameInput, nameText, 'Имя не менее 6 символов');
+                    return false;
+                } else {
+                    ValidateInput(nameInput, nameText, 'Ваше имя');
+                    return true;
+                }
+            }
+        
+            const CheckTelephone = () => {
+                let telephoneInput = document.getElementById('authorization-field-phone');
+                let telephoneText = document.getElementById('authorization-p-phone');
+                let telephone = telephoneInput.value;
+                if (!ValidateTelephone(telephone)) {
+                    UnvalidateInput(telephoneInput, telephoneText, 'Неправильный номер');
+                    return false;
+                } else {
+                    ValidateInput(telephoneInput, telephoneText, 'Ваш телефон для связи');
+                    return true;
+                }
+            }
+        
+            const CheckEmail = () => {
+                let emailInput = document.getElementById('authorization-field-email');
+                let emailText = document.getElementById('authorization-p-email');
+                let email = emailInput.value;
+                if (!ValidateEmail(email)) {
+                    UnvalidateInput(emailInput, emailText, 'Неправильная почта');
+                    return false;
+                } else {
+                    ValidateInput(emailInput, emailText, 'Ваша электронная почта');
+                    return true;
+                }
+            }
+        
+            const CheckBirthday = () => {
+                let birthdayInput = document.getElementById('authorization-field-birthday');
+                let birthdayText = document.getElementById('authorization-p-birthday');
+                let birthday = birthdayInput.value;
+                if (!ValidateBirthday(birthday)) {
+                    UnvalidateInput(birthdayInput, birthdayText, 'Неправильная дата рождения');
+                    return false;
+                } else {
+                    ValidateInput(birthdayInput, birthdayText, 'Дата рождения');
+                    return true;
+                }
+            }
+        
+            const CheckPassword = () => {
+                let passwordInput = document.getElementById('authorization-field-password');
+                let passwordText = document.getElementById('authorization-p-password');
+                let password = passwordInput.value;
+                if (!ValidatePassword(password)) {
+                    UnvalidateInput(passwordInput, passwordText, 'Пароль не менее 6 символов');
+                    return false;
+                } else {
+                    ValidateInput(passwordInput, passwordText, 'Введите пароль');
+                    return true;
+                }
+            }
+        
+            function createUser(event) {
+                // if(!CheckName() || !CheckTelephone() || !CheckEmail() || !CheckBirthday() || !CheckPassword()) {
+                //     return;
+                // }
+                let username = document.getElementById('authorization-field-name').value;
+                let phone_number = document.getElementById('authorization-field-phone').value;
+                let email = document.getElementById('authorization-field-email').value;
+                let birthdate = document.getElementById('authorization-field-birthday').value;
+                let password = document.getElementById('authorization-field-password').value;
+        
+                let xhr = new XMLHttpRequest();
+                let url = "http://127.0.0.1:8000/auth/jwt/register";
+                
+                xhr.open("POST", url, true);
+                xhr.setRequestHeader("Content-Type", "application/json");
+        
+                xhr.onreadystatechange = function () {
+                if (xhr.status === 201) {
+                    window.location.href = "/cart"
+                } else if (xhr.status === 400){
+                    let emailInput = document.getElementById('authorization-field-email');
+                    let emailText = document.getElementById('authorization-p-email');
+                    UnvalidateInput(emailInput, emailText, 'Уже зарегистрирован');
+        
+                    
+                } else {
+                    event.preventDefault();
+                    event.stopPropagation();
+                    console.log('Error');
+                }
+                
+                }
+        
+                var data = JSON.stringify({ "username": username, "email": email, "password": password, "phone_number": phone_number, "birthdate": birthdate, "role_id": 0});
+        
+                xhr.send(data);
+            }
+            function LoginUser() {
+                let email = document.getElementById('login-field-email').value;
+                let password = document.getElementById('login-field-password').value;
+                
+                let xhr = new XMLHttpRequest();
+                
+                xhr.withCredentials = true
+                let url = "http://127.0.0.1:8000/auth/login";
+                xhr.open("POST", url, true);
+                xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+                
+                xhr.onreadystatechange = function () {
+                    if (xhr.status == 200) {
+                        window.location.href = '/cart';
+                    } else {
+                    
+                    }
+                    }
+                var data = 'username=' + encodeURIComponent(email) + '&password=' + encodeURIComponent(password);
+                xhr.send(data);
+                
+
+            }
+        </script>
+    </body>
+    
+</html>

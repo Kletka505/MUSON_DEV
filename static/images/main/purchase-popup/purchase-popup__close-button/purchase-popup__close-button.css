@@ -1,0 +1,14 @@
+.purchase-popup__close-button {
+    position: absolute;
+    right: 15px;
+    top: 15px;
+
+    font-size: 20px;
+    font-family: Verdana;
+    color: #888;
+    transition: color 0.2s;
+}
+
+.purchase-popup__close-button:hover {
+    color: #333;
+}

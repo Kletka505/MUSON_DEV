@@ -1,0 +1,18 @@
+@import url(item__img.css);
+@import url(item__name-label.css);
+@import url(item__price-label.css);
+@import url(item_cart__row.css);
+@import url(item_cart__delete-button/item_cart__delete-button.css);
+
+.item_cart {
+    width: 100%;
+    display: flex;
+    justify-content: row;
+    justify-content: space-between;
+    align-items: center;
+
+    color: #111;
+    font-family: 'Merriweather';
+    font-size: 18px;
+    line-height: 27px; 
+}

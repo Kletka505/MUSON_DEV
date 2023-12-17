@@ -1,0 +1,8 @@
+.page-divide-line {
+    border: 0;
+    clear:both;
+    display:block;
+    width: 100%;               
+    background-color:#888;
+    height: 1px;
+}

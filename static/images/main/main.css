@@ -1,0 +1,18 @@
+@import url(main-header/main-header.css);
+@import url(category/category.css);
+@import url(purchase-popup/purchase-popup.css);
+@import url(page-divide-line/page-divide-line.css);
+
+.main {
+    background-color: #F3F3F3;
+    color: #111;
+}
+
+.main__container {
+    margin: 0 auto;
+    padding-bottom: 10px;
+    width: 80%;
+
+    display: flex;
+    flex-direction: column;
+}

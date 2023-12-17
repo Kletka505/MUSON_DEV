@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>О нас — Strike 'Em All</title>
+        <meta charset="utf-8">
+        <meta name="language" content="RU">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="{{ url_for('static', path='styles/style.css') }}">
+    </head>
+    <body>
+        <div class="stike-em-all-page">
+            <header class="header">
+                <div class="header__container">
+                    <div class="header__column">
+                        <div class="logo header__logo">
+                            <a class="logo__link-container" href="http://127.0.0.1:8000/home">
+                                <img class="logo__img noselect" src="{{ url_for('static', path='images/common/logo/logo.svg')}}" alt="three targets">
+                                    <span class="logo__name-label">Strike 'Em All</span>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="header__column">
+                        <nav class="website-menu header__website-menu">
+                            <ul class="website-menu__list">
+                                <li class="website-menu__item"><a class="website-menu__link website-menu__link_chosen" href="http://127.0.0.1:8000/catalog">Каталог</a></li>
+                                <li class="website-menu__item"><a class="website-menu__link" href="in-development.html">Отзывы</a></li>
+                                <li class="website-menu__item"><a class="website-menu__link" href="/about">О нас</a></li>
+                            </ul>
+                        </nav>
+                    </div>
+                    <div class="header__column">
+                        <div class="catalog-search">
+                            <form class="catalog-search__form" action="/search/" method="get" autocomplete="off" >
+                                <input 
+                                    class="catalog-search__input"
+                                    type="text" 
+                                    name="text"
+                                    placeholder="Поиск по каталогу">
+                            </form>
+                        </div>
+                    </div>
+                    <div class="header__column">
+                        <nav class="user-navigation">
+                            <ul class="user-navigation__list">
+                                <li class="user-navigation__item">
+                                    <a class="user-navigation__link" href="/account">
+                                        <img class="user-navigation__img user-navigation__img_color_fff noselect" src="{{ url_for('static', path='images/header/user-navigation/account_fff.svg')}}" alt="account">
+                                    </a>
+                                </li>
+                                <li class="user-navigation__item">
+                                    <a class="user-navigation__link" href="in-development.html">
+                                        <img class="user-navigation__img user-navigation__img_color_fff noselect" src="{{ url_for('static', path='images/header/user-navigation/favourites_fff.svg')}}" alt="favourites">
+                                    </a>
+                                </li>
+                                <li class="user-navigation__item">
+                                    <a class="user-navigation__link" href="/cart">
+                                        <img class="user-navigation__img user-navigation__img_color_fff noselect" src="{{ url_for('static', path='images/header/user-navigation/shopping-cart_fff.svg')}}" alt="shopping-cart">
+                                    </a>
+                                </li>
+                            </ul>
+                        </nav>
+                    </div>
+                </div>
+            </header>
+            <main class="main">
+                <div class="main__container">
+                    <div class="category">
+                        <div class="explanation">
+                            <h1 class="explanation__header explanation__header_oops-header">Упс :(</h1>
+                            <h2 class="explanation__header explanation__header_name-label">Этот раздел еще находится в разработке!</h2>
+                            <p class="explanation__paragraph">К сожалению, данный фрагмент сайта, на который Вы перешли, в нынешний момент не работает.</p>
+                            <p class="explanation__paragraph">Приносим свои извинения, мы уже работаем над исправлением проблемы.</p>
+                            <p class="explanation__paragraph">С уважением, админинстрация сайта</p>
+                        </div>
+                    </div>
+                </div>
+            </main>
+            <footer class="footer">
+                <div class="footer__container">
+                    <div class="footer__column">
+                        <div class="logo footer__logo">
+                            <a class="logo__link" href="/home">
+                                <span class="logo__name-label">Strike 'Em All</span>
+                            </a>
+                            <p class="logo__copyright-label">© 2023 Все права защищены.</p>
+                        </div>
+                    </div>
+                    <div class="footer__column">
+                        <nav class="footer-info website-info">
+                            <span class="footer-info__name-label website-info__name-label">Информация</span>
+                            <ul class="footer-info__list website-info__list">
+                                <li class="footer-info__item website-info__item"><a class="footer-info__link website-info__link" href="/about">О нас</a></li>
+                                <li class="footer-info__item website-info__item"><a class="footer-info__link website-info__link" href="in-development.html">Отзывы</a></li>
+                                <li class="footer-info__item website-info__item"><a class="footer-info__link website-info__link" href="in-development.html">Политика безопасности</a></li>
+                            </ul>
+                        </nav>
+                    </div>
+                    <div class="footer__column">
+                        <nav class="footer-info social-media">
+                            <span class="footer-info__name-label social-media__name-label">Социальные сети</span>
+                            <ul class="footer-info__list social-media__list">
+                                <li class="footer-info__item social-media__item">
+                                    <a class="footer-info__link social-media__link" href="https://vk.com/strikeEmAll">
+                                        <img class="footer-info__img social-media__img img-noselect" src="{{ url_for('static', path='images/footer/social-media/vk_fff.svg')}}" alt="vk">
+                                        ВКонтакте
+                                    </a>
+                                </li>
+                                <li class="footer-info__item social-media__item">
+                                    <a class="footer-info__link social-media__link" href="https://t.me/strikeEmAll">
+                                        <img class="footer-info__img social-media__img img-noselect" src="{{ url_for('static', path='images/footer/social-media/telegram_fff.svg')}}" alt="telegram">
+                                        Telegram
+                                    </a>
+                                </li>
+                                <li class="footer-info__item social-media__item">
+                                    <a class="footer-info__link social-media__link" href="https://www.youtube.com/@strikeEmAll">
+                                        <img class="footer-info__img social-media__img img-noselect" src="{{ url_for('static', path='images/footer/social-media/vk_fff.svg')}}" alt="youtube">
+                                        YouTube
+                                    </a>
+                                </li>
+                            </ul>
+                        </nav>
+                    </div>
+                </div>
+            </footer>
+        </div>
+    </body>
+</html>

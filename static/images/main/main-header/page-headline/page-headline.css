@@ -1,0 +1,10 @@
+@import url(page-headline__name-label.css);
+@import url(page-headline__count.css);
+
+.page-headline {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: baseline;
+    gap: 15px;
+}

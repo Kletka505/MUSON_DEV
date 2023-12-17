@@ -1,0 +1,36 @@
+image: tmaier/docker-compose:latest
+
+stages:
+  - build
+  - test
+
+services:
+  - docker:dind
+
+variables:
+  GIT_SUBMODULE_STRATEGY: recursive
+  POSTGRES_DB: strike_em_all
+  POSTGRES_USER: postgres
+  POSTGRES_PASSWORD: 3478
+  DOCKER_BUILDKIT: 1
+  BUILDKIT_INLINE_CACHE: 1
+  COMPOSE_DOCKER_CLI_BUILD: 1
+
+before_script:
+  - docker info
+  - docker-compose --version
+
+build:
+  stage: build
+  script:
+    - docker-compose build
+
+test:
+  stage: test
+  image: python:3.8
+  before_script:
+    - python --version
+    - pip install -r requirements.txt
+
+  script:
+    - pytest

@@ -1,0 +1,6 @@
+.item_cart__row {
+    display: flex;
+    justify-content: row;
+    align-items: center;
+    gap: 25px;
+}

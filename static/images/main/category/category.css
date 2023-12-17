@@ -1,0 +1,21 @@
+@import url(filter-panel/filter-panel.css);
+@import url(auth-page/auth-page.css);
+@import url(explanation/explanation.css);
+@import url(item/item-cart.css);
+@import url(item/item-catalog.css);
+@import url(result-price/result-price.css);
+@import url(cart-buttons/cart-buttons.css);
+@import url(user-data/user-data.css);
+@import url(profile-buttons/profile-buttons.css);
+
+.category {
+    display: flex;
+    flex-direction: row;
+    
+
+    padding-top: 20px;
+}
+
+.category__item-cart {
+    flex-direction: column;
+}

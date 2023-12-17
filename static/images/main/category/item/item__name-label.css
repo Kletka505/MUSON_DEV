@@ -1,0 +1,8 @@
+.item__name-label {
+    color: #111;
+    transition: color 0.05s;
+}
+
+.item__name-label:hover {
+    color: #B41818;
+}

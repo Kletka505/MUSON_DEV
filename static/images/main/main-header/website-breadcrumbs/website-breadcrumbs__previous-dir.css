@@ -1,0 +1,9 @@
+.website-breadcrumbs__previous-dir {
+    color: #888;
+    text-decoration: underline;
+}
+
+.website-breadcrumbs__previous-dir:hover {
+    color: #B41818;
+    text-decoration: none;
+}

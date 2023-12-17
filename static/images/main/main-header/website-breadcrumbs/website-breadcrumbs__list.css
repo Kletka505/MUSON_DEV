@@ -1,0 +1,10 @@
+.website-breadcrumbs__list {
+    display: flex;
+    flex-direction: row;
+    gap: 20px;
+
+    margin-top: 60px;
+    padding: 0;
+
+    list-style-type: none;
+}

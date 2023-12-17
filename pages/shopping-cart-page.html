@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Корзина — Strike 'Em All</title>
+        <meta charset="utf-8">
+        <meta name="language" content="RU">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="{{ url_for('static', path='styles/style.css') }}">
+        <script type="text/javascript">
+            
+            function thisUser() {
+                fetch("http://127.0.0.1:8000/users/me", {
+                    headers: {
+                        'Content-type': 'application/json',
+                    },
+                    method: 'GET',
+                    credentials: 'include',
+                })
+                    .then(data => data.json())
+
+                    .then(data => {
+                        console.log(data)
+                        if (data.detail == 'Unauthorized'){
+                            window.location.href = '/account';
+                        }
+                    })
+            }
+            window.onload = thisUser;
+            </script>
+    </head>
+    <body>
+        <div class="stike-em-all-page">
+            <header class="header">
+                <div class="header__container">
+                    <div class="header__column">
+                        <div class="logo header__logo">
+                            <a class="logo__link-container" href="http://127.0.0.1:8000/home">
+                                <img class="logo__img noselect" src="{{ url_for('static', path='images/common/logo/logo.svg')}}" alt="three targets">
+                                    <span class="logo__name-label">Strike 'Em All</span>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="header__column">
+                        <nav class="website-menu header__website-menu">
+                            <ul class="website-menu__list">
+                                <li class="website-menu__item"><a class="website-menu__link website-menu__link_chosen" href="http://127.0.0.1:8000/catalog">Каталог</a></li>
+                                <li class="website-menu__item"><a class="website-menu__link" href="in-development.html">Отзывы</a></li>
+                                <li class="website-menu__item"><a class="website-menu__link" href="/about">О нас</a></li>
+                            </ul>
+                        </nav>
+                    </div>
+                    <div class="header__column">
+                        <div class="catalog-search">
+                            <form class="catalog-search__form" action="/search/" method="get" autocomplete="off" >
+                                <input 
+                                    class="catalog-search__input"
+                                    type="text" 
+                                    name="text"
+                                    placeholder="Поиск по каталогу">
+                            </form>
+                        </div>
+                    </div>
+                    <div class="header__column">
+                        <nav class="user-navigation">
+                            <ul class="user-navigation__list">
+                                <li class="user-navigation__item">
+                                    <a class="user-navigation__link" href="/account">
+                                        <img class="user-navigation__img user-navigation__img_color_fff noselect" src="{{ url_for('static', path='images/header/user-navigation/account_fff.svg')}}" alt="account">
+                                    </a>
+                                </li>
+                                <li class="user-navigation__item">
+                                    <a class="user-navigation__link" href="in-development.html">
+                                        <img class="user-navigation__img user-navigation__img_color_fff noselect" src="{{ url_for('static', path='images/header/user-navigation/favourites_fff.svg')}}" alt="favourites">
+                                    </a>
+                                </li>
+                                <li class="user-navigation__item">
+                                    <a class="user-navigation__link" href="/cart">
+                                        <img class="user-navigation__img user-navigation__img_color_fff noselect" src="{{ url_for('static', path='images/header/user-navigation/shopping-cart_fff.svg')}}" alt="shopping-cart">
+                                    </a>
+                                </li>
+                            </ul>
+                        </nav>
+                    </div>
+                </div>
+            </header>
+            <main class="main">
+                <div class="main__container">
+                    <div class="main-header">
+                        <nav class="website-breadcrumbs">
+                            <ol class="website-breadcrumbs__list">
+                                <li class="website-breadcrumbs__item website-breadcrumbs__item_previous"><a class="website-breadcrumbs__previous-dir" href="http://127.0.0.1:8000/home">Главная</a></li>
+                                <li class="website-breadcrumbs__item website-breadcrumbs__item_previous"><a class="website-breadcrumbs__previous-dir" href="http://127.0.0.1:8000/account">Личный кабинет</a></li>
+                                <li class="website-breadcrumbs__item website-breadcrumbs__item_current"><span class="website-breadcrumbs__current-dir">Корзина</span></li>
+                            </ol>
+                        </nav>
+                        <div class="page-headline">
+                            <h1 class="page-headline__name-label">Корзина</h1>
+                        </div>
+                        <hr class="page-divide-line">
+                    </div>
+                    <div class="category category__item-cart">
+                        <div class="item-cart">
+                            <!-- <div class="item item_cart">
+                                <div class="item_cart__row">
+                                    <a class="item__link item_cart__link" href="item-page.html"><img class="item__img item_cart__img img-noselect" src="../components/main/category/items/airsoft-rifles__catalog/COLT_M4A1_FullMetal_13_Keymod_Airsoft_AEG_Black.png"></a>
+                                    <a class="item__link item_cart__link" href="item-page.html"><span class="item__name-label item_cart__name-label">COLT M4A1 Full Metal 13" Keymod Airsoft AEG, Black</span></a>
+                                </div>
+                                <div class="item_cart__row">
+                                    <span class="item__price-label item_cart__price-label">22490₽</span>
+                                </div>
+                                <div class="item_cart__row">
+                                    <button class="item_cart__delete-button" type="submit"><img class="delete-button__img" src="../components/main/category/item/item_cart__delete-button/delete-button__img.svg" alt="delete-icon"></button>
+                                </div>
+                            </div> -->
+                        </div>
+                        <hr class="page-divide-line">
+                        <div class="result-price">
+                            <h3 class="result-price__name-label">Итого:</h3>
+                            <span class="result-price__number"></span>
+                        </div>
+                        <div class="cart-buttons">
+                            <a class="cart-button__link submit-button continue-shopping-button" href="http://127.0.0.1:8000/catalog">Продолжить покупки</a>
+                            <input class="submit-button place-order-button" type="button" value="Оформить заказ">
+                        </div>
+                        
+                    </div>
+                </div>
+            </main>
+            <footer class="footer">
+                <div class="footer__container">
+                    <div class="footer__column">
+                        <div class="logo footer__logo">
+                            <a class="logo__link" href="home-page.html">
+                                <span class="logo__name-label">Strike 'Em All</span>
+                            </a>
+                            <p class="logo__copyright-label">© 2023 Все права защищены.</p>
+                        </div>
+                    </div>
+                    <div class="footer__column">
+                        <nav class="footer-info website-info">
+                            <span class="footer-info__name-label website-info__name-label">Информация</span>
+                            <ul class="footer-info__list website-info__list">
+                                <li class="footer-info__item website-info__item"><a class="footer-info__link website-info__link" href="about-us-page.html">О нас</a></li>
+                                <li class="footer-info__item website-info__item"><a class="footer-info__link website-info__link" href="in-development.html">Отзывы</a></li>
+                                <li class="footer-info__item website-info__item"><a class="footer-info__link website-info__link" href="in-development.html">Политика безопасности</a></li>
+                            </ul>
+                        </nav>
+                    </div>
+                    <div class="footer__column">
+                        <nav class="footer-info social-media">
+                            <span class="footer-info__name-label social-media__name-label">Социальные сети</span>
+                            <ul class="footer-info__list social-media__list">
+                                <li class="footer-info__item social-media__item">
+                                    <a class="footer-info__link social-media__link" href="https://vk.com/strikeEmAll">
+                                        <img class="footer-info__img social-media__img img-noselect" src="{{ url_for('static', path='images/footer/social-media/vk_fff.svg')}}" alt="vk">
+                                        ВКонтакте
+                                    </a>
+                                </li>
+                                <li class="footer-info__item social-media__item">
+                                    <a class="footer-info__link social-media__link" href="https://t.me/strikeEmAll">
+                                        <img class="footer-info__img social-media__img img-noselect" src="{{ url_for('static', path='images/footer/social-media/telegram_fff.svg')}}" alt="telegram">
+                                        Telegram
+                                    </a>
+                                </li>
+                                <li class="footer-info__item social-media__item">
+                                    <a class="footer-info__link social-media__link" href="https://www.youtube.com/@strikeEmAll">
+                                        <img class="footer-info__img social-media__img img-noselect" src="{{ url_for('static', path='images/footer/social-media/vk_fff.svg')}}" alt="youtube">
+                                        YouTube
+                                    </a>
+                                </li>
+                            </ul>
+                        </nav>
+                    </div>
+                </div>
+            </footer>
+        </div>
+    </body>
+
+</html>

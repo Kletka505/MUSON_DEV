@@ -1,0 +1,11 @@
+@import url(filter-block/filter-block.css);
+@import url(sort-items/sort-items.css);
+
+.header-actions {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+}
+
+
