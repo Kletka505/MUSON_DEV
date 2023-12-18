@@ -6,7 +6,9 @@
         <meta name="language" content="RU">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link rel="stylesheet" href="{{ url_for('static', path='styles/style.css') }}">
-        
+        <style> 
+            @import url('https://fonts.googleapis.com/css2?family=Merriweather:wght@400;700&family=Odor+Mean+Chey&display=swap'); 
+        </style>
     </head>
     <body>
         <div class="stike-em-all-page">
@@ -24,7 +26,7 @@
                         <nav class="website-menu header__website-menu">
                             <ul class="website-menu__list">
                                 <li class="website-menu__item"><a class="website-menu__link website-menu__link_chosen" href="/catalog">Каталог</a></li>
-                                <li class="website-menu__item"><a class="website-menu__link" href="in-development.html">Отзывы</a></li>
+                                <li class="website-menu__item"><a class="website-menu__link" href="/about">Отзывы</a></li>
                                 <li class="website-menu__item"><a class="website-menu__link" href="/about">О нас</a></li>
                             </ul>
                         </nav>
@@ -49,7 +51,7 @@
                                     </a>
                                 </li>
                                 <li class="user-navigation__item">
-                                    <a class="user-navigation__link" href="in-development.html">
+                                    <a class="user-navigation__link" href="/about">
                                         <img class="user-navigation__img user-navigation__img_color_fff noselect" src="{{ url_for('static', path='images/header/user-navigation/favourites_fff.svg')}}" alt="favourites">
                                     </a>
                                 </li>
@@ -99,7 +101,7 @@
                                             <div class="auth-page__submit">
                                                 <button class="submit-button auth-page__auth-button" onclick="LoginUser()">Войти</button>
                                             </div>
-                                            <a class="auth-page__restore-password" href="in-development.html">Восстановить пароль</a>
+                                            <a class="auth-page__restore-password" href="/about">Восстановить пароль</a>
                                         </form>
                                     </div>
                                 </div>
@@ -123,7 +125,7 @@
                                                 <input class="auth-page__input required" id="authorization-field-birthday" type="text" name="birthday" placeholder="Дата рождения" value=""/>
                                             </div>
                                             <div class="auth-page__submit">
-                                                <button class="submit-button auth-page__auth-button" onClick="createUser()">
+                                                <button class="submit-button auth-page__auth-button"  onClick="createUser()">
                                                     <span>Зарегистрироваться</span>
                                                 </button>
                                             </div>
@@ -147,8 +149,8 @@
                                     </div>
                                 </div>
                                 <div class="profile-buttons">
-                                    <a class="profile-button more-data-button" href="in-development.html">Профиль</a>
-                                    <a class="profile-button logout-button" href="in-development.html">Выйти из аккаунта</a>
+                                    <a class="profile-button more-data-button" href="/about">Профиль</a>
+                                    <a class="profile-button logout-button" href="/logout">Выйти из аккаунта</a>
                                 </div>
                             </div>
                         </div>
@@ -170,8 +172,8 @@
                             <span class="footer-info__name-label website-info__name-label">Информация</span>
                             <ul class="footer-info__list website-info__list">
                                 <li class="footer-info__item website-info__item"><a class="footer-info__link website-info__link" href="/about">О нас</a></li>
-                                <li class="footer-info__item website-info__item"><a class="footer-info__link website-info__link" href="in-development.html">Отзывы</a></li>
-                                <li class="footer-info__item website-info__item"><a class="footer-info__link website-info__link" href="in-development.html">Политика безопасности</a></li>
+                                <li class="footer-info__item website-info__item"><a class="footer-info__link website-info__link" href="/about">Отзывы</a></li>
+                                <li class="footer-info__item website-info__item"><a class="footer-info__link website-info__link" href="/about">Политика безопасности</a></li>
                             </ul>
                         </nav>
                     </div>
@@ -204,124 +206,7 @@
             </footer>
         </div>
         <script>
-            const cameFromShoppingCart = true;
-            const isAuthorised = false;
-        
-        
-        
-            function authPageFormSent(authPageForm) {
-                if (accountLogged == true) {
-                    window.location.href = "../pages/shopping-cart.html";
-                };
-            }
-        
-            const UnvalidateInput = (input, p, text) => {
-                input.classList.remove('field-yellow');
-                input.classList.add('field-red');
-                p.innerText = text;
-                p.style.color = 'red';
-            }
-        
-            const ValidateInput = (input, p, text) => {
-                input.classList.remove('field-red');
-                input.classList.add('field-yellow');
-                p.innerText = text;
-                p.style.color = 'black';
-            }
-        
-            const ValidateName = (name) => {
-                return (name.length >= 6 ? true : false);
-            }
-        
-            const ValidateTelephone = (telephone) => {
-                // eslint-disable-next-line no-useless-escape
-                return telephone.match(/^[\d\+][\d\(\)\ -]{4,14}\d$/);
-            }
-        
-            const ValidateEmail = (email) => {
-                // eslint-disable-next-line no-useless-escape
-                if(email.match(/^[\w]{1}[\w-\.]*@[\w-]+\.[a-z]{2,4}$/i))
-                    return true;
-                return false;
-            };
-        
-            const ValidateBirthday = (birthday) => {
-                return (birthday.length == 10 ? true : false);
-            }
-        
-            const ValidatePassword = (password) => {
-                return (password.length >= 6 ? true : false);
-            }
-        
-            const CheckName = () => {
-                let nameInput = document.getElementById('authorization-field-name');
-                let nameText = document.getElementById('authorization-p-name');
-                let name = nameInput.value;
-                if (!ValidateName(name)) {
-                    UnvalidateInput(nameInput, nameText, 'Имя не менее 6 символов');
-                    return false;
-                } else {
-                    ValidateInput(nameInput, nameText, 'Ваше имя');
-                    return true;
-                }
-            }
-        
-            const CheckTelephone = () => {
-                let telephoneInput = document.getElementById('authorization-field-phone');
-                let telephoneText = document.getElementById('authorization-p-phone');
-                let telephone = telephoneInput.value;
-                if (!ValidateTelephone(telephone)) {
-                    UnvalidateInput(telephoneInput, telephoneText, 'Неправильный номер');
-                    return false;
-                } else {
-                    ValidateInput(telephoneInput, telephoneText, 'Ваш телефон для связи');
-                    return true;
-                }
-            }
-        
-            const CheckEmail = () => {
-                let emailInput = document.getElementById('authorization-field-email');
-                let emailText = document.getElementById('authorization-p-email');
-                let email = emailInput.value;
-                if (!ValidateEmail(email)) {
-                    UnvalidateInput(emailInput, emailText, 'Неправильная почта');
-                    return false;
-                } else {
-                    ValidateInput(emailInput, emailText, 'Ваша электронная почта');
-                    return true;
-                }
-            }
-        
-            const CheckBirthday = () => {
-                let birthdayInput = document.getElementById('authorization-field-birthday');
-                let birthdayText = document.getElementById('authorization-p-birthday');
-                let birthday = birthdayInput.value;
-                if (!ValidateBirthday(birthday)) {
-                    UnvalidateInput(birthdayInput, birthdayText, 'Неправильная дата рождения');
-                    return false;
-                } else {
-                    ValidateInput(birthdayInput, birthdayText, 'Дата рождения');
-                    return true;
-                }
-            }
-        
-            const CheckPassword = () => {
-                let passwordInput = document.getElementById('authorization-field-password');
-                let passwordText = document.getElementById('authorization-p-password');
-                let password = passwordInput.value;
-                if (!ValidatePassword(password)) {
-                    UnvalidateInput(passwordInput, passwordText, 'Пароль не менее 6 символов');
-                    return false;
-                } else {
-                    ValidateInput(passwordInput, passwordText, 'Введите пароль');
-                    return true;
-                }
-            }
-        
-            function createUser(event) {
-                // if(!CheckName() || !CheckTelephone() || !CheckEmail() || !CheckBirthday() || !CheckPassword()) {
-                //     return;
-                // }
+            function createUser() {
                 event.preventDefault();
                 let username = document.getElementById('authorization-field-name').value;
                 let phone_number = document.getElementById('authorization-field-phone').value;
@@ -337,7 +222,8 @@
         
                 xhr.onload = function () {
                 if (xhr.status === 201) {
-                    window.location.href = "/cart"
+                    alert("вы успешно зарегестрированы")
+                    window.location.href = "/account"
                 } else if (xhr.status === 400){
                     alert("Пользователь уже зарегистрирован")
                 } else {
