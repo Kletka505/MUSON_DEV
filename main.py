@@ -17,12 +17,18 @@ from fastapi.middleware.cors import CORSMiddleware
 from server.schemas import UserRead, UserCreate, UserUpdate
 
 from models.models import rifle, carts
-from sqlalchemy import Column, String, Boolean, Integer, TIMESTAMP, ForeignKey, create_engine, select, insert
+from sqlalchemy import Column, String, Boolean, Integer, TIMESTAMP, ForeignKey, create_engine, select, insert, delete, and_
 from sqlalchemy.ext.asyncio import AsyncSession 
 from sqlalchemy.ext.declarative import DeclarativeMeta, declarative_base
 from sqlalchemy.orm import sessionmaker, Session
 
+Base = declarative_base()
 
+class Cart(Base):
+    __tablename__ = 'carts'
+    id = Column(Integer, primary_key=True)
+    user_id = Column(Integer)
+    product_name = Column(String)
 
 app = FastAPI(
     title="StrikeEmAll",
@@ -68,27 +74,27 @@ templates = Jinja2Templates(directory="pages")
 
 
 @app.get("/account")
-def unprotected_route(request: Request):
+def account(request: Request):
     return templates.TemplateResponse("account-page.html", {"request": request})
 
 @app.get("/catalog")
-def unprotected_route(request: Request):
+def catalog(request: Request):
     return templates.TemplateResponse("catalog-page.html", {"request": request})
 
 @app.get("/home")
-def unprotected_route(request: Request):
+def home(request: Request):
     return templates.TemplateResponse("home-page.html", {"request": request})
 
 @app.get("/cart")
-def unprotected_route(request: Request):
+def cart(request: Request):
     return templates.TemplateResponse("shopping-cart-page.html", {"request": request})
 
 @app.get("/about")
-def unprotected_route(request: Request):
+def about(request: Request):
     return templates.TemplateResponse("about-us-page.html", {"request": request})
 
 @app.get("/item")
-def unprotected_route(request: Request):
+def item(request: Request):
     return templates.TemplateResponse("item-page.html", {"request": request})
 
 
@@ -100,7 +106,7 @@ engine = engine = create_engine(DATABASE_URL)
 session = Session(bind=engine)
 
 @app.get("/rifle")
-def get_rifles():
+def get_products():
     try:
         query = select(rifle)
         data = session.execute(query)
@@ -126,25 +132,69 @@ async def add_to_cart(user_id: int, product_name: str):
     try:
         stmt = insert(carts).values(user_id=f"{user_id}", product_name=f"{product_name}")
         result = session.execute(stmt)
+        print(result)
         session.commit()
     except Exception as e:
         print(e)
         raise HTTPException(status_code=500, detail=f"Error: {str(e)}")
     
 @app.get("/cart_items/{user_id}")
-async def add_to_cart(user_id: int):
-    query = select(carts).where(carts.c.user_id == f"{user_id}")
+async def cart_items(user_id: str):
+    query = (
+        select(
+            rifle.c.name,
+            rifle.c.price,
+        )
+        .select_from(carts.join(rifle, carts.c.product_name == rifle.c.name))
+        .where(carts.c.user_id == user_id)
+    )
     result = session.execute(query)
-    S = {"products": [i[2] for i in result.all()]}
-    print(S)
-    return S
+
+    rows = result.all()
+
+    return {"products": [i[0] for i in rows], "total_sum" : sum([int(i[1]) for i in rows])}
 
     
-@app.get("/product/{product_name}")
-async def add_to_cart(product_name: int):
+@app.get("/product_get/{product_name}")
+async def product_get(product_name: str):
     try:
         query = select(rifle).where(rifle.c.name == f"{product_name}")
         result = session.execute(query)
-        return result
+        arr = result.all()[0]
+        S = {"name": arr[1], "price": arr[3], "image_path" : arr[5]}
+        return S
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Error: {str(e)}")
+    
+@app.post("/product_delete_from_cart/{user_id}/{product_name}")
+async def product_del_from_cart(user_id: str, product_name: str):
+    try:
+        record_to_delete = (
+            session.query(Cart)
+            .filter_by(user_id=user_id, product_name=product_name)
+            .first()
+        )
+        if record_to_delete:
+            session.delete(record_to_delete)
+
+        session.commit()
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Error: {str(e)}")
+    
+@app.post("/delete_cart/{user_id}")
+async def delete_cart(user_id: str):
+    try:
+        records_to_delete = (
+            session.query(Cart)
+            .filter_by(user_id=user_id)
+            .all()
+        )
+        
+        for record in records_to_delete:
+            session.delete(record)
+
+        session.commit()
+        
+        return {"detail": "Cart items deleted successfully."}
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Error: {str(e)}")

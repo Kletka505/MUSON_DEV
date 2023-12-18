@@ -6,6 +6,9 @@
         <meta name="language" content="RU">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link rel="stylesheet" href="{{ url_for('static', path='styles/style.css') }}">
+        <style> 
+            @import url('https://fonts.googleapis.com/css2?family=Merriweather:wght@400;700&family=Odor+Mean+Chey&display=swap'); 
+        </style>
         <script type="text/javascript">
             
             function thisUser() {
@@ -18,23 +21,61 @@
                 })
                 .then(response => response.json())
                 .then(userData => {
-                    // userData содержит данные о пользователе, включая его id
-                    const userId = userData.id;
+                    if (userData.detail == 'Unauthorized'){
+                        window.location.href = '/account';
+                    }
+                    else{
+                        const userId = userData.id;
 
-                    // Отправляем запрос на cart_items/id
-                    return fetch(`http://127.0.0.1:8000/cart_items/${userId}`, {
-                        headers: {
-                            'Content-type': 'application/json',
-                        },
-                        method: 'GET',
-                        credentials: 'include',
-                    });
+                        return fetch(`http://127.0.0.1:8000/cart_items/${userId}`, {
+                            headers: {
+                                'Content-type': 'application/json',
+                            },
+                            method: 'GET',
+                            credentials: 'include',
+                        });
+                    }
+                    
                 })
                 .then(cartItemsResponse => cartItemsResponse.json())
                 .then(cartItemsData => {
-                    cartItemsData.products.forEach(product => {
-                        console.log(product)
-                        
+                    
+                    cartItemsData.products.forEach(productName => {
+                        fetch(`http://127.0.0.1:8000/product_get/${productName}`)
+                            .then(response => response.json())
+                            .then(productData => {
+                                const totalSumElement = document.getElementById("TotalSum");
+                                if (totalSumElement) {
+                                    totalSumElement.textContent = `Итого: ${cartItemsData.total_sum}`;
+                                }
+                                const container = document.getElementById('cartContainer');
+                                const cardElement = document.createElement('div');
+                                cardElement.className = 'item item_cart';
+
+                                cardElement.innerHTML = `
+                                    <div class="item_cart__row">
+                                        <a class="item__link item_cart__link" >
+                                            <img class="item__img item_cart__img img-noselect" src="{{ url_for('static', path='${productData.image_path}')}}" alt="Product Image">
+                                        </a>
+                                        <a class="item__link item_cart__link" href="item-page.html">
+                                            <span class="item__name-label item_cart__name-label">${productData.name}</span>
+                                        </a>
+                                    </div>
+                                    <div class="item_cart__row">
+                                        <span class="item__price-label item_cart__price-label">${productData.price}</span>
+                                    </div>
+                                    <div class="item_cart__row">
+                                        <button class="item_cart__delete-button" type="button" onclick="deleteProductFromCart('${productData.name}')">
+                                            <img class="delete-button__img" src="{{ url_for('static', path='images/main/category/item/item_cart__delete-button/delete-button__img.svg')}}" alt="delete-icon">
+                                        </button>
+                                    </div>
+                                `;
+
+                                container.appendChild(cardElement);
+                            })
+                            .catch(error => {
+                                console.error(`Error fetching product data for ${productName}:`, error);
+                            });
                     });
                 })
                 .catch(error => {
@@ -42,7 +83,59 @@
                 });
             }
             window.onload = thisUser;
+            function deleteCartByUserId() {
+                fetch("http://127.0.0.1:8000/users/me", {
+                    headers: {
+                        'Content-type': 'application/json',
+                    },
+                    method: 'GET',
+                    credentials: 'include',
+                })
+                .then(response => response.json())
+                .then(userData => {
+                    const userId = userData.id;
+
+                    return fetch(`http://127.0.0.1:8000/delete_cart/${userId}`, {
+                        method: 'POST',
+                        credentials: 'include',
+                    });
+                })
+                .then(response => response.json())
+                .then(data => {
+                    alert("Заказ успешно оформлен, чек об оплате отправлен на почту")
+                    window.location.href = '/cart';
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                });
+            }
             
+            function deleteProductFromCart(productName) {
+                fetch("http://127.0.0.1:8000/users/me", {
+                    headers: {
+                        'Content-type': 'application/json',
+                    },
+                    method: 'GET',
+                    credentials: 'include',
+                })
+                .then(response => response.json())
+                .then(userData => {
+                    const userId = userData.id;
+                    fetch(`http://127.0.0.1:8000/product_delete_from_cart/${userId}/${productName}`, {
+                        method: 'POST',
+                        credentials: 'include',
+                        headers: {
+                            'Content-type': 'application/json',
+                        },
+                    })
+                    .then(response => response.json())
+                    .then(result => {
+                        window.location.href = '/cart';
+                    })
+                    .catch(error => console.error('Ошибка при удалении продукта:', error));
+                })
+                .catch(error => console.error('Ошибка при получении данных пользователя:', error));
+            }
         </script>
     </head>
     <body>
@@ -77,7 +170,7 @@
                             </form>
                         </div>
                     </div>
-                    <div class="header__column">
+                    <div class="header__column" >
                         <nav class="user-navigation">
                             <ul class="user-navigation__list">
                                 <li class="user-navigation__item">
@@ -116,28 +209,17 @@
                         <hr class="page-divide-line">
                     </div>
                     <div class="category category__item-cart">
-                        <div class="item-cart">
-                            <!-- <div class="item item_cart">
-                                <div class="item_cart__row">
-                                    <a class="item__link item_cart__link" href="item-page.html"><img class="item__img item_cart__img img-noselect" src="../components/main/category/items/airsoft-rifles__catalog/COLT_M4A1_FullMetal_13_Keymod_Airsoft_AEG_Black.png"></a>
-                                    <a class="item__link item_cart__link" href="item-page.html"><span class="item__name-label item_cart__name-label">COLT M4A1 Full Metal 13" Keymod Airsoft AEG, Black</span></a>
-                                </div>
-                                <div class="item_cart__row">
-                                    <span class="item__price-label item_cart__price-label">22490₽</span>
-                                </div>
-                                <div class="item_cart__row">
-                                    <button class="item_cart__delete-button" type="submit"><img class="delete-button__img" src="../components/main/category/item/item_cart__delete-button/delete-button__img.svg" alt="delete-icon"></button>
-                                </div>
-                            </div> -->
+                        <div class="item-cart" id="cartContainer">
+
                         </div>
                         <hr class="page-divide-line">
                         <div class="result-price">
-                            <h3 class="result-price__name-label">Итого:</h3>
+                            <h3 class="result-price__name-label" id="TotalSum">Итого:</h3>
                             <span class="result-price__number"></span>
                         </div>
                         <div class="cart-buttons">
                             <a class="cart-button__link submit-button continue-shopping-button" href="http://127.0.0.1:8000/catalog">Продолжить покупки</a>
-                            <input class="submit-button place-order-button" type="button" value="Оформить заказ">
+                            <input class="submit-button place-order-button" type="button" onclick="deleteCartByUserId()" value="Оформить заказ">
                         </div>
                         
                     </div>
