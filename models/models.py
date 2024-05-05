@@ -28,23 +28,28 @@ user = Table(
     Column("is_verified", Boolean, default=False, nullable=False),
 )
 
-rifle = Table(
-    "rifle",
+news = Table(
+    "news",
     metadata,
     Column("id", Integer, primary_key=True),
-    Column("name", String),
-    Column("brand", String),
-    Column("price", String),
-    Column("calibr", String),
+    Column("title", String),
     Column("image_path", String),
-    Column("link", String)
-    
+    Column("content", String)   
 )
-
-carts = Table(
-    "carts",
+release = Table(
+    "release",
     metadata,
-    Column("id", Integer, primary_key=True),
+    Column("post_id", Integer, primary_key=True),
+    Column("title", String),
+    Column("image_path", String),
+    Column("content", String),
+    Column("link", String)
+)
+comments = Table(
+    "comments",
+    metadata,
+    Column("comment_id", Integer, primary_key=True),
+    Column("post_id", Integer, ForeignKey("release.post_id"), nullable=False),
     Column("user_id", String),
     Column("product_name", String),
 )

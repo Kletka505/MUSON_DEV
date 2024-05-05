@@ -16,7 +16,7 @@ from server.manager import get_user_manager
 from fastapi.middleware.cors import CORSMiddleware
 from server.schemas import UserRead, UserCreate, UserUpdate
 
-from models.models import rifle, carts
+from models.models import release, comments, news
 from sqlalchemy import Column, String, Boolean, Integer, TIMESTAMP, ForeignKey, create_engine, select, insert, delete, and_
 from sqlalchemy.ext.asyncio import AsyncSession 
 from sqlalchemy.ext.declarative import DeclarativeMeta, declarative_base
@@ -135,7 +135,6 @@ async def add_to_cart(user_id: int, product_name: str):
     try:
         stmt = insert(carts).values(user_id=f"{user_id}", product_name=f"{product_name}")
         result = session.execute(stmt)
-        print(result)
         session.commit()
     except Exception as e:
         print(e)

@@ -16,7 +16,7 @@
                 <div class="header__container">
                     <div class="header__column">
                         <div class="logo header__logo">
-                            <a class="logo__link-container" href="/home">
+                            <a class="logo__link-container" href="http://127.0.0.1:8000/home">
                                 <img class="logo__img noselect" src="{{ url_for('static', path='images/common/logo/logo.svg')}}" alt="three targets">
                                     <span class="logo__name-label">Strike 'Em All</span>
                             </a>
@@ -26,7 +26,7 @@
                         <nav class="website-menu header__website-menu">
                             <ul class="website-menu__list">
                                 <li class="website-menu__item"><a class="website-menu__link website-menu__link_chosen" href="/catalog">Каталог</a></li>
-                                <li class="website-menu__item"><a class="website-menu__link" href="in-development.html">Отзывы</a></li>
+                                <li class="website-menu__item"><a class="website-menu__link" href="/about">Отзывы</a></li>
                                 <li class="website-menu__item"><a class="website-menu__link" href="/about">О нас</a></li>
                             </ul>
                         </nav>
@@ -51,7 +51,7 @@
                                     </a>
                                 </li>
                                 <li class="user-navigation__item">
-                                    <a class="user-navigation__link" href="in-development.html">
+                                    <a class="user-navigation__link" href="/about">
                                         <img class="user-navigation__img user-navigation__img_color_fff noselect" src="{{ url_for('static', path='images/header/user-navigation/favourites_fff.svg')}}" alt="favourites">
                                     </a>
                                 </li>
@@ -66,7 +66,54 @@
                 </div>
             </header>
             <main class="main">
-                
+                <div class="main__container">
+                    <div class="main__row">
+                        <div class="main-header">
+                            <nav class="website-breadcrumbs">
+                                <ol class="website-breadcrumbs__list">
+                                    <li class="website-breadcrumbs__item website-breadcrumbs__item_previous"><a class="website-breadcrumbs__previous-dir" href="/home">Главная</a></li>
+                                    <li class="website-breadcrumbs__item website-breadcrumbs__item_previous"><a class="website-breadcrumbs__previous-dir" href="/catalog">Каталог</a></li>
+                                    <li class="website-breadcrumbs__item website-breadcrumbs__item_current"><a class="website-breadcrumbs__previous-dir" href="/catalog">Страйкбольные автоматы</a></li>
+                                </ol>
+                            </nav>
+                            <div class="page-headline">
+                                <h1 class="page-headline__name-label page-headline__name-label_item-page">CYMA Standard AK47 Full Metal Real Wood Blowback Airsoft AEG Rifle, Wood/Black</h1>
+                            </div>
+                            <hr class="page-divide-line">
+                        </div>
+                    </div>
+                    <div class="main__row">
+                        <div class="category category_item-page">
+                            <div class="item-paged">
+                                <div class="item-paged__column">
+                                    <h2 class="item-paged__name-label">Характеристики:</h2>
+                                    <dl class="item-paged__characteristics-list">
+                                        <dt class="item-paged__characteristics-term"><b>Страна-производитель</b></dt><dd class="item-paged__characteristics-definition">Россия.</dd>
+                                        <dt class="item-paged__characteristics-term"><b>Материал</b></dt><dd class="item-paged__characteristics-definition">дерево, металл.</dd>
+                                        <dt class="item-paged__characteristics-term"><b>Цвет</b></dt><dd class="item-paged__characteristics-definition">черный, древесный.</dd>
+                                        <dt class="item-paged__characteristics-term"><b>Размер магазина</b></dt><dd class="item-paged__characteristics-definition">600 патронов.</dd>
+                                        <dt class="item-paged__characteristics-term"><b>Калибр</b></dt><dd class="item-paged__characteristics-definition">6мм.</dd>
+                                    </dl>
+                                </div>
+                                <div class="item-paged__column">
+                                    <img class="item__img item-paged__img img-noselect" src="{{ url_for('static', path='images/main/category/items/airsoft-rifles__catalog/CYMA_Standard_AK47_FullMetal.png')}}">
+                                    <div class="item-paged__purchase-row">
+                                        <span class="item__price-label item-paged__price-label">19.990₽</span>
+                                        <input class="submit-button purchase-button" type="button" value="Добавить в корзину">
+                                    </div>
+                                    <span class="item__availability-label item-paged__availability-label">
+                                        <img class="item-paged__availability-img_black" src="{{ url_for('static', path='images/main/category/category_item-page/item-paged/item-paged__availability-img_black.svg')}}">
+                                        В наличии в интернет-магазине
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="customer-reviews">
+                                <h2 class="customer-reviews__name-label">Отзывы</h2>
+                                <p class="customer-reviews__paragraph">На этот товар пока отзывов нет. Будьте первым, кто его оставит!</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </main>
             <footer class="footer">
                 <div class="footer__container">
@@ -82,9 +129,9 @@
                         <nav class="footer-info website-info">
                             <span class="footer-info__name-label website-info__name-label">Информация</span>
                             <ul class="footer-info__list website-info__list">
-                                <li class="footer-info__item website-info__item"><a class="footer-info__link website-info__link" href="about-us-page.html">О нас</a></li>
-                                <li class="footer-info__item website-info__item"><a class="footer-info__link website-info__link" href="in-development.html">Отзывы</a></li>
-                                <li class="footer-info__item website-info__item"><a class="footer-info__link website-info__link" href="in-development.html">Политика безопасности</a></li>
+                                <li class="footer-info__item website-info__item"><a class="footer-info__link website-info__link" href="/about">О нас</a></li>
+                                <li class="footer-info__item website-info__item"><a class="footer-info__link website-info__link" href="/about">Отзывы</a></li>
+                                <li class="footer-info__item website-info__item"><a class="footer-info__link website-info__link" href="/about">Политика безопасности</a></li>
                             </ul>
                         </nav>
                     </div>
