@@ -1,9 +1,0 @@
-@import url(profile-button.css);
-
-.profile-buttons {
-    display: flex;
-    flex-direction: row;
-    gap: 50px;
-
-    margin-bottom: 180px;
-}

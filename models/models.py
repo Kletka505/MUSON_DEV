@@ -31,25 +31,39 @@ user = Table(
 news = Table(
     "news",
     metadata,
-    Column("id", Integer, primary_key=True),
-    Column("title", String),
-    Column("image_path", String),
-    Column("content", String)   
-)
-release = Table(
-    "release",
-    metadata,
-    Column("post_id", Integer, primary_key=True),
+    Column("news_id", Integer, primary_key=True),
     Column("title", String),
     Column("image_path", String),
     Column("content", String),
-    Column("link", String)
+    Column("date", String),
+
+)
+releases = Table(
+    "releases",
+    metadata,
+    Column("release_id", Integer, primary_key=True),
+    Column("artist", String),
+    Column("title", String),
+    Column("image_path", String),
+    Column("content", String),
+    Column("link", String),
+
+
 )
 comments = Table(
     "comments",
     metadata,
-    Column("comment_id", Integer, primary_key=True),
-    Column("post_id", Integer, ForeignKey("release.post_id"), nullable=False),
-    Column("user_id", String),
-    Column("product_name", String),
+    Column("comment_id", Integer, primary_key=True, autoincrement=True),
+    Column("release_id", Integer, ForeignKey("releases.release_id"), nullable=False),
+    Column("id", Integer, ForeignKey("user.id"), nullable=True),
+    Column("content", String)
+
+)
+
+likes = Table(
+    "likes",
+    metadata,
+    Column("like_id", Integer, primary_key=True, autoincrement=True),
+    Column("id", Integer, ForeignKey("user.id"), nullable=True),
+    Column("release_id", Integer, ForeignKey("releases.release_id"), nullable=False),
 )

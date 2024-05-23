@@ -1,9 +1,0 @@
-@import url(popup-catalog-item__texted/popup-catalog-item__texted.css);
-
-.popup-catalog-item {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    gap: 20px;
-}

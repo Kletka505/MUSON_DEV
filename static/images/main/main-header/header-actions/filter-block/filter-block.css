@@ -1,8 +1,0 @@
-@import url(filter-block__img.css);
-@import url(filter-block__name-label.css);
-
-.filter-block {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-}
