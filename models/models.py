@@ -45,10 +45,9 @@ releases = Table(
     Column("artist", String),
     Column("title", String),
     Column("image_path", String),
+    Column("archive_path", String),
     Column("content", String),
     Column("link", String),
-
-
 )
 comments = Table(
     "comments",

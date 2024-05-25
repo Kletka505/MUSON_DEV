@@ -1,9 +1,9 @@
 from fastapi_users import fastapi_users, FastAPIUsers
 from pydantic import Field
 
-from fastapi import FastAPI, Depends, HTTPException
+from fastapi import FastAPI, Depends, HTTPException, UploadFile, File, Form
 from fastapi.encoders import jsonable_encoder
-from fastapi.responses import HTMLResponse
+from fastapi.responses import FileResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 from fastapi import APIRouter, Request, Depends
@@ -21,6 +21,7 @@ from sqlalchemy import Column, String, Boolean, Integer, TIMESTAMP, ForeignKey, 
 from sqlalchemy.ext.asyncio import AsyncSession 
 from sqlalchemy.ext.declarative import DeclarativeMeta, declarative_base
 from sqlalchemy.orm import sessionmaker, Session
+import shutil, os
 
 Base = declarative_base()
 
@@ -67,46 +68,12 @@ app.include_router(
 
 current_user = fastapi_users.current_user()
 
-app.mount("/static", StaticFiles(directory="static"), name="static")
-
-
-templates = Jinja2Templates(directory="pages")
-
-
-@app.get("/account")
-def account(request: Request):
-    return templates.TemplateResponse("account-page.html", {"request": request})
-
-@app.get("/catalog")
-def catalog(request: Request):
-    return templates.TemplateResponse("catalog-page.html", {"request": request})
-
-@app.get("/home")
-def home(request: Request):
-    return templates.TemplateResponse("home-page.html", {"request": request})
-
-@app.get("/cart")
-def cart(request: Request):
-    return templates.TemplateResponse("shopping-cart-page.html", {"request": request})
-
-@app.get("/about")
-def about(request: Request):
-    return templates.TemplateResponse("about-us-page.html", {"request": request})
-
-@app.get("/item")
-def item(request: Request):
-    return templates.TemplateResponse("item-page.html", {"request": request})
-
-@app.get("/reviews")
-def item(request: Request):
-    return templates.TemplateResponse("about-us-page.html", {"request": request})
-
-
 DATABASE_URL = f"postgresql://{DB_USER}:{DB_PASS}@{DB_HOST}:{DB_PORT}/{DB_NAME}"
 
 engine = engine = create_engine(DATABASE_URL)
 
 session = Session(bind=engine)
+
 
 @app.get("/get_news")
 def get_products():
@@ -200,51 +167,111 @@ async def post_like(id: int, release_id: int):
 @app.post("/delete_like/{id}/{release_id}")
 async def delete_like(id: int, release_id: int):
     try:
-        record_to_delete = (
-            session.query(Cart)
-            .filter_by(id=id, release_id=release_id)
-            .first()
+        delete_stmt = (
+            delete(likes)
+            .where(likes.c.id == id)
+            .where(likes.c.release_id == release_id)
         )
-        if record_to_delete:
-            session.delete(record_to_delete)
-
+        result = session.execute(delete_stmt)
         session.commit()
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Error: {str(e)}")
     
-
-    
-@app.get("/cart_items/{user_id}")
-async def cart_items(user_id: str):
-    query = (
-        select(
-            rifle.c.name,
-            rifle.c.price,
-        )
-        .select_from(carts.join(rifle, carts.c.product_name == rifle.c.name))
-        .where(carts.c.user_id == user_id)
-    )
-    result = session.execute(query)
-
-    rows = result.all()
-
-    return {"products": [i[0] for i in rows], "total_sum" : sum([int(i[1]) for i in rows])}
-    
-    
-@app.post("/delete_cart/{user_id}")
-async def delete_cart(user_id: str):
+@app.get("/get_like/{id}/{release_id}")
+def get_products(id: int, release_id: int):
     try:
-        records_to_delete = (
-            session.query(Cart)
-            .filter_by(user_id=user_id)
-            .all()
-        )
-        
-        for record in records_to_delete:
-            session.delete(record)
-
-        session.commit()
-        
-        return {"detail": "Cart items deleted successfully."}
+        query = select(likes).where(likes.c.id == id).where(likes.c.release_id == release_id)
+        data = session.execute(query)
+        j = 0
+        result = {"likes" : []}
+        for i in data.all():
+            result['likes'].append({})
+            result['likes'][j]["like_id"] = i[0]
+            result['likes'][j]["id"] = i[1]
+            result['likes'][j]["release_id"] = i[2]
+            j+=1
+        if result['likes']:
+            return True
+        else:
+            return False
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Error: {str(e)}")
+    
+@app.post("/upload_release/")
+async def upload_release(artist: str = Form(...),
+    title: str = Form(...),
+    content: str = Form(...),
+    link: str = Form(...),
+    image: UploadFile = File(...),
+    archive: UploadFile = File(...)
+):
+    try:
+        with open(f"uploads/{image.filename}", "wb") as buffer:
+            shutil.copyfileobj(image.file, buffer)
+        with open(f"uploads/{archive.filename}", "wb") as buffer:
+            shutil.copyfileobj(archive.file, buffer)
+        
+        image_path = f"uploads/{image.filename}"
+        archive_path = f"uploads/{archive.filename}"
+
+        release_data = {
+            "artist": artist,
+            "title": title,
+            "image_path": image_path,
+            "archive_path": archive_path,
+            "content": content,
+            "link": link,
+            "archive_path": archive_path,
+        }
+        insert_query = releases.insert().values(**release_data)
+        session.execute(insert_query)
+        session.commit()
+        
+        return {"message": "Release uploaded successfully", "image_path": image_path}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+    
+@app.post("/upload_news/")
+async def upload_release(title: str = Form(...),
+    content: str = Form(...),
+    date: str = Form(...),
+    image: UploadFile = File(...),
+    
+):
+    try:
+        with open(f"uploads/{image.filename}", "wb") as buffer:
+            shutil.copyfileobj(image.file, buffer)
+        
+        image_path = f"uploads/{image.filename}"
+        release_data = {
+            "title": title,
+            "image_path": image_path,
+            "content": content,
+            "date": date,
+        }
+        insert_query = news.insert().values(**release_data)
+        session.execute(insert_query)
+        session.commit()
+        
+        return {"message": "News uploaded successfully", "image_path": image_path}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+    
+@app.get("/download_archive/{release_id}")
+async def download_archive(release_id: int):
+    # Поиск записи по release_id
+    query = select(releases).where(releases.c.release_id == release_id)
+    result = session.execute(query).fetchone()
+
+    if not result:
+        raise HTTPException(status_code=404, detail="Release not found")
+
+    archive_path = result.archive_path
+
+    # Проверка существования файла
+    if not os.path.isfile(archive_path):
+        raise HTTPException(status_code=404, detail="File not found")
+
+    # Возврат файла
+    return FileResponse(archive_path, filename=os.path.basename(archive_path), media_type='application/octet-stream')
