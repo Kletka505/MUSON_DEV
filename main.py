@@ -16,8 +16,8 @@ from server.manager import get_user_manager
 from fastapi.middleware.cors import CORSMiddleware
 from server.schemas import UserRead, UserCreate, UserUpdate
 
-from models.models import releases, comments, news, likes
-from sqlalchemy import Column, String, Boolean, Integer, TIMESTAMP, ForeignKey, create_engine, select, insert, delete, and_
+from models.models import releases, comments, news, likes, user
+from sqlalchemy import Column, String, Boolean, Integer, TIMESTAMP, ForeignKey, create_engine, select, insert, delete, join
 from sqlalchemy.ext.asyncio import AsyncSession 
 from sqlalchemy.ext.declarative import DeclarativeMeta, declarative_base
 from sqlalchemy.orm import sessionmaker, Session
@@ -122,28 +122,52 @@ def get_products():
 @app.get("/get_release/{release_id}")
 async def get_release(release_id: int):
     try:
-        query = select(releases).where(releases.c.release_id == f"{release_id}")
+        query = select(releases).where(releases.c.release_id == release_id)
         result = session.execute(query)
-        arr = result.all()[0]
-        query = select(comments).where(comments.c.release_id == f"{release_id}")
+        release = result.fetchone()
+
+        if release is None:
+            raise HTTPException(status_code=404, detail="Release not found")
+
+        query = (
+            select(comments.c.comment_id, user.c.username, comments.c.content)
+            .join(user, comments.c.id == user.c.id)
+            .where(comments.c.release_id == release_id)
+        )
         result = session.execute(query)
-        arr2 = result.all()[0]
-        S = {"release_id": arr[0], "artist": arr[1], "title" : arr[2], "image_path" : arr[3], "content" : arr[4], "link" : arr[5], "comments" : arr2}
-        return S
+        comments_data = result.fetchall()
+
+        comments_dict = {
+            comment.comment_id: {"username": comment.username, "content": comment.content}
+            for comment in comments_data
+        }
+
+        response = {
+            "release_id": release.release_id,
+            "artist": release.artist,
+            "title": release.title,
+            "image_path": release.image_path,
+            "content": release.content,
+            "link": release.link,
+            "comments": comments_dict,
+        }
+        return response
+
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Error: {str(e)}")
     
 
 
-@app.post("/post_comment/{id}/{release_id}/{content}")
-async def post_comment(id: int, release_id: int, content: str):
+@app.post("/post_comment/{release_id}/{content}")
+async def post_comment( release_id: int, content: str, user=Depends(current_user)):
     try:
-        stmt = insert(comments).values(id=f"{id}", release_id=f"{release_id}", content=f"{content}")
+        stmt = insert(comments).values(id=user.id, release_id=f"{release_id}", content=f"{content}")
         result = session.execute(stmt)
         session.commit()
     except Exception as e:
         print(e)
         raise HTTPException(status_code=500, detail=f"Error: {str(e)}")
+    
 @app.post("/post_release/{artist}/{title}/{content}")
 async def post_release(artist: str, title: str, content: str):
     try:
@@ -154,42 +178,42 @@ async def post_release(artist: str, title: str, content: str):
         print(e)
         raise HTTPException(status_code=500, detail=f"Error: {str(e)}")
     
-@app.post("/post_like/{id}/{release_id}")
-async def post_like(id: int, release_id: int):
+@app.post("/post_like/{release_id}")
+async def post_like(release_id: int, user=Depends(current_user)):
     try:
-        stmt = insert(likes).values(id=f"{id}", release_id=f"{release_id}")
-        result = session.execute(stmt)
+        stmt = insert(likes).values(id=user.id, release_id=release_id)
+        session.execute(stmt)
         session.commit()
+        return {"message": "Like added successfully"}
     except Exception as e:
-        print(e)
+        session.rollback()
         raise HTTPException(status_code=500, detail=f"Error: {str(e)}")
 
-@app.post("/delete_like/{id}/{release_id}")
-async def delete_like(id: int, release_id: int):
+@app.post("/delete_like/{release_id}")
+async def delete_like(release_id: int, user=Depends(current_user)):
     try:
-        delete_stmt = (
-            delete(likes)
-            .where(likes.c.id == id)
-            .where(likes.c.release_id == release_id)
-        )
-        result = session.execute(delete_stmt)
+        delete_stmt = delete(likes).where(likes.c.id == user.id).where(likes.c.release_id == release_id)
+        session.execute(delete_stmt)
         session.commit()
+        return {"message": "Like removed successfully"}
     except Exception as e:
+        session.rollback()
         raise HTTPException(status_code=500, detail=f"Error: {str(e)}")
     
-@app.get("/get_like/{id}/{release_id}")
-def get_products(id: int, release_id: int):
+@app.get("/get_like/{release_id}")
+def get_like(release_id: int, user=Depends(current_user)):
     try:
-        query = select(likes).where(likes.c.id == id).where(likes.c.release_id == release_id)
+        user_id = user.id
+        query = select(likes).where(likes.c.id == user_id).where(likes.c.release_id == release_id)
         data = session.execute(query)
         j = 0
-        result = {"likes" : []}
+        result = {"likes": []}
         for i in data.all():
             result['likes'].append({})
             result['likes'][j]["like_id"] = i[0]
             result['likes'][j]["id"] = i[1]
             result['likes'][j]["release_id"] = i[2]
-            j+=1
+            j += 1
         if result['likes']:
             return True
         else:
@@ -275,3 +299,44 @@ async def download_archive(release_id: int):
 
     # Возврат файла
     return FileResponse(archive_path, filename=os.path.basename(archive_path), media_type='application/octet-stream')
+
+
+@app.get("/liked_releases")
+async def get_liked_releases(user=Depends(current_user)):
+    try:
+        user_id = user.id
+        username = user.username
+
+        # Запрос для получения лайкнутых релизов пользователя
+        query = (
+            select(
+                releases.c.release_id,
+                releases.c.title,
+                releases.c.image_path
+            )
+            .select_from(
+                join(releases, likes, releases.c.release_id == likes.c.release_id)
+            )
+            .where(likes.c.id == user_id)
+        )
+
+        result = session.execute(query)
+        liked_releases = result.fetchall()
+
+        # Формирование результата
+        response = {
+            "user_id": user_id,
+            "username": username,
+            "liked_releases": [
+                {
+                    "release_id": release.release_id,
+                    "title": release.title,
+                    "image_path": release.image_path
+                }
+                for release in liked_releases
+            ]
+        }
+        return response
+
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Error: {str(e)}")
